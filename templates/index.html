@@ -1,11 +1,64 @@
-<!DOCTYPE html>
-<html lang="RU-ru">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
-</head>
-<body>
-<a>dsf</a>
-</body>
-</html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Sarro — астероиды по почте{% endblock %}
+
+{% block content %}
+<div class="container page page--general">
+    <section class="hero">
+        <div class="hero__card">
+            <h1 class="hero__title">Астероид по почте</h1>
+            <p class="hero__text">
+                Корпорация Sarro Orbital Mining открывает прямой доступ к реестру малых небесных тел
+                Солнечной системы. Мы занимаемся разведкой, захватом и буксировкой астероидов для
+                частных колоний, добывающих станций и коллекционеров.<br>
+                В нашей базе собраны проверенные объекты из Главного пояса и сближающихся орбит.
+                Каждый лот прошел спектральный анализ и готов к смене орбитального владельца.
+                Выберите подходящий астероид в каталоге, укажите координаты точки сброса и
+                подтвердите транзакцию в крышках. Доставка на опорную орбиту Земли или Луны
+                занимает от 14 стандартных циклов.
+            </p>
+        </div>
+
+        <div class="hero__media">
+            <img src="{% static 'img/image 1.png' %}" alt="Астероид" class="hero__image">
+            <img src="{% static 'img/image 2.png' %}" alt="Астероид" class="hero__image">
+        </div>
+    </section>
+
+    <section class="lots">
+        <h2 class="lots__title">Наши Лоты</h2>
+
+        <div class="lots__panel">
+            <div class="lots__grid">
+                {% for asteroid in asteroids %}
+                    <article class="lot-card">
+                        <a href="{% url 'asteroid_detail' asteroid.pk %}" class="lot-card__image-link">
+                            {% if asteroid.image %}
+                                <img src="{{ asteroid.image.url }}"
+                                     alt="{{ asteroid.title }}"
+                                     class="lot-card__image">
+                            {% else %}
+                                <span class="lot-card__image lot-card__image--empty"></span>
+                            {% endif %}
+                        </a>
+                        <div class="lot-card__info">
+                            <h3 class="lot-card__title">
+                                <a href="{% url 'asteroid_detail' asteroid.pk %}" class="lot-card__title-link">
+                                    {{ asteroid.title }}
+                                </a>
+                            </h3>
+                            <p class="lot-card__desc">{{ asteroid.description }}</p>
+                            <span class="lot-card__price">{{ asteroid.price_display }} крышек</span>
+                        </div>
+                    </article>
+                {% empty %}
+                    <p class="lots__empty">Каталог пока пуст. Загляните позже.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <a href="{% url 'catalog' %}" class="button button--more">показать еще</a>
+    </section>
+</div>
+{% endblock %}

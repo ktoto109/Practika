@@ -1,6 +1,4 @@
 from django.db import models
-
-from django.db import models
 from django.contrib.auth.models import User
 
 
@@ -31,7 +29,7 @@ class Asteroid(models.Model):
     description = models.TextField('Описание')
     price = models.PositiveIntegerField('Цена (в крышках)')
     distance = models.PositiveIntegerField('Расстояние (км)')
-    image = models.ImageField('Фотография', upload_to='asteroids/')
+    image = models.ImageField('Фотография', upload_to='asteroids/', blank=True, null=True)
     spectral_class = models.ForeignKey(
         SpectralClass,
         on_delete=models.SET_NULL,
@@ -46,8 +44,12 @@ class Asteroid(models.Model):
     is_sold = models.BooleanField('Продан', default=False)
     created_at = models.DateTimeField('Дата добавления', auto_now_add=True)
 
+    @property
+    def price_display(self):
+        return f"{self.price:,}".replace(",", ".")
+
     def __str__(self):
-        return f"{self.title} ({self.price} крышек)"
+        return f"{self.title} ({self.price_display} крышек)"
 
     class Meta:
         verbose_name = 'Астероид'

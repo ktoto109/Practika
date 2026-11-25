@@ -1,1 +1,806 @@
-/* Стили административной панели. */
+/* ---------- Админ-панель ---------- */
+
+.page--admin {
+    padding-top: 77px;
+    padding-bottom: 64px;
+}
+
+.admin {
+    display: grid;
+    grid-template-columns: 420px minmax(0, 1fr);
+    gap: 60px;
+    align-items: start;
+}
+
+/* ---------- Сайдбар ---------- */
+
+.admin__heading {
+    font-family: var(--font-display);
+    font-size: 42px;
+    line-height: 1.2;
+}
+
+.admin__panel {
+    display: flex;
+    flex-direction: column;
+    min-height: 746px;
+    margin-top: 36px;
+    padding: 32px 28px;
+    border: 4px solid var(--accent);
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.admin__panel-title {
+    font-family: var(--font-display);
+    font-size: 30px;
+    line-height: 1.2;
+}
+
+.admin__panel-subtitle {
+    margin-top: 11px;
+    color: #adb0c2;
+    font-size: 26px;
+    line-height: 1.18;
+}
+
+.admin__divider {
+    height: 1px;
+    margin-top: 24px;
+    background: rgba(48, 43, 192, 0.65);
+}
+
+.admin__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    margin-top: 26px;
+}
+
+.admin__nav-link {
+    position: relative;
+    color: #adb0c2;
+    font-size: 32px;
+    line-height: 1.18;
+    transition: color 0.15s ease;
+}
+
+.admin__nav-link:hover {
+    color: var(--white);
+}
+
+.admin__nav-link--active {
+    color: var(--white);
+}
+
+.admin__nav-link--active::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -32px;
+    width: 5px;
+    height: 44px;
+    background: var(--accent);
+    transform: translateY(-50%);
+}
+
+.admin__divider--status {
+    margin-top: 120px;
+}
+
+.admin__system {
+    margin-top: 32px;
+    font-size: 26px;
+    line-height: 1.18;
+}
+
+.admin__updated {
+    margin-top: 16px;
+    color: #adb0c2;
+    font-size: 24px;
+    line-height: 1.18;
+}
+
+.admin__brand {
+    margin-top: 52px;
+    font-size: 26px;
+    line-height: 1.18;
+}
+
+/* ---------- Заголовок и статистика ---------- */
+
+.admin__title {
+    font-family: var(--font-display);
+    font-size: 44px;
+    line-height: 1.2;
+}
+
+.admin__subtitle {
+    margin-top: 5px;
+    color: #adb0c2;
+    font-size: 26px;
+    line-height: 1.18;
+}
+
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 32px;
+    margin-top: 29px;
+}
+
+.admin-stats__card {
+    min-height: 146px;
+    padding: 20px 22px;
+    border: 3px solid var(--accent);
+    background: rgba(0, 0, 0, 0.82);
+}
+
+.admin-stats__label {
+    color: #adb0c2;
+    font-size: 24px;
+    line-height: 1.18;
+}
+
+.admin-stats__value {
+    margin-top: 17px;
+    font-family: var(--font-display);
+    font-size: 40px;
+    line-height: 1.2;
+}
+
+.admin-stats__value--revenue {
+    font-size: 30px;
+}
+
+/* ---------- Лоты и фильтры ---------- */
+
+.admin-lots-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-top: 46px;
+}
+
+.admin-lots-head__title {
+    font-family: var(--font-display);
+    font-size: 36px;
+    line-height: 1.2;
+}
+
+.button--admin-add {
+    width: 284px;
+    height: 54px;
+    padding: 0;
+    border-width: 3px;
+    background: rgba(0, 0, 0, 0.6);
+    font-size: 30px;
+}
+
+.admin-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-top: 37px;
+}
+
+.admin-toolbar__search {
+    width: 642px;
+    height: 54px;
+    padding: 0 18px;
+    border: 2px solid var(--accent);
+    background: rgba(0, 0, 0, 0.72);
+    color: var(--white);
+    font-size: 28px;
+    line-height: 1;
+}
+
+.admin-toolbar__search::placeholder {
+    color: #adb0c2;
+    opacity: 1;
+}
+
+.admin-toolbar__search:focus {
+    outline: none;
+    background: rgba(48, 43, 192, 0.18);
+}
+
+.admin-toolbar__status {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: 280px;
+    height: 54px;
+    padding: 0 10px;
+    border: 3px solid var(--accent);
+    background: rgba(0, 0, 0, 0.6);
+    font-size: 30px;
+    line-height: 1.18;
+    cursor: pointer;
+}
+
+.admin-toolbar__select {
+    appearance: none;
+    -webkit-appearance: none;
+    min-width: 0;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--white);
+    font: inherit;
+    cursor: pointer;
+    outline: none;
+}
+
+.admin-toolbar__select option {
+    background: var(--black);
+    color: var(--white);
+}
+
+.admin-toolbar__found {
+    margin-left: auto;
+    color: #adb0c2;
+    font-size: 26px;
+    line-height: 1.18;
+    white-space: nowrap;
+}
+
+/* ---------- Таблица ---------- */
+
+.admin-table {
+    margin-top: 30px;
+    border: 4px solid var(--accent);
+    background: rgba(0, 0, 0, 0.88);
+}
+
+.admin-table__head,
+.admin-table__row {
+    display: grid;
+    grid-template-columns:
+        126px
+        minmax(140px, 2.4fr)
+        minmax(110px, 1.4fr)
+        minmax(100px, 1.2fr)
+        minmax(160px, 1.6fr);
+    align-items: center;
+    gap: 16px;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.admin-table__head {
+    padding-top: 19px;
+    padding-bottom: 19px;
+    border-bottom: 1px solid rgba(48, 43, 192, 0.65);
+    color: #adb0c2;
+    font-size: 24px;
+    line-height: 1.18;
+}
+
+.admin-table__row {
+    padding-top: 22px;
+    padding-bottom: 19px;
+    font-size: 28px;
+    line-height: 1.18;
+}
+
+.admin-table__row + .admin-table__row {
+    border-top: 1px solid rgba(48, 43, 192, 0.65);
+}
+
+.admin-table__cell {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.admin-table__actions {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    white-space: nowrap;
+}
+
+.admin-table__action {
+    font-size: 28px;
+    line-height: 1.18;
+}
+
+.admin-table__action:hover {
+    color: var(--accent-bright);
+}
+
+.admin-table__action--muted {
+    color: #adb0c2;
+    font-size: 26px;
+}
+
+.admin-table__empty {
+    padding: 24px;
+    color: #adb0c2;
+    font-size: 24px;
+}
+
+.admin-table__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 20px 24px;
+}
+
+.admin-table__found {
+    color: #adb0c2;
+    font-size: 24px;
+    line-height: 1.18;
+}
+
+.admin-table__pagination {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    font-size: 24px;
+    line-height: 1.18;
+}
+
+.admin-table__page-link {
+    color: var(--white);
+}
+
+.admin-table__page-link:hover {
+    color: var(--accent-bright);
+}
+
+.admin-table__page-link--disabled {
+    color: #adb0c2;
+    pointer-events: none;
+}
+
+.admin-table__page-current {
+    color: var(--white);
+}
+
+/* ---------- 1200–1599 ---------- */
+
+@media (max-width: 1599px) {
+    .page--admin {
+        padding-top: 60px;
+        padding-bottom: 48px;
+    }
+
+    .admin {
+        grid-template-columns: 320px minmax(0, 1fr);
+        gap: 40px;
+    }
+
+    .admin__heading {
+        font-size: 36px;
+    }
+
+    .admin__panel {
+        min-height: 650px;
+        margin-top: 28px;
+        padding: 28px 24px;
+        border-width: 3px;
+    }
+
+    .admin__panel-title {
+        font-size: 26px;
+    }
+
+    .admin__panel-subtitle {
+        font-size: 22px;
+    }
+
+    .admin__nav {
+        gap: 22px;
+    }
+
+    .admin__nav-link {
+        font-size: 26px;
+    }
+
+    .admin__nav-link--active::before {
+        left: -27px;
+        height: 38px;
+    }
+
+    .admin__divider--status {
+        margin-top: 80px;
+    }
+
+    .admin__system {
+        font-size: 22px;
+    }
+
+    .admin__updated {
+        font-size: 20px;
+    }
+
+    .admin__brand {
+        margin-top: 32px;
+        font-size: 22px;
+    }
+
+    .admin__title {
+        font-size: 36px;
+    }
+
+    .admin__subtitle {
+        font-size: 22px;
+    }
+
+    .admin-stats {
+        gap: 20px;
+        margin-top: 24px;
+    }
+
+    .admin-stats__card {
+        padding: 16px;
+    }
+
+    .admin-stats__label {
+        font-size: 20px;
+    }
+
+    .admin-stats__value {
+        font-size: 32px;
+    }
+
+    .admin-stats__value--revenue {
+        font-size: 26px;
+    }
+
+    .admin-lots-head {
+        margin-top: 36px;
+    }
+
+    .admin-lots-head__title {
+        font-size: 30px;
+    }
+
+    .button--admin-add {
+        width: 240px;
+        height: 48px;
+        font-size: 24px;
+    }
+
+    .admin-toolbar {
+        margin-top: 28px;
+    }
+
+    .admin-toolbar__search {
+        flex: 1;
+        width: auto;
+        height: 48px;
+        font-size: 22px;
+    }
+
+    .admin-toolbar__status {
+        width: 230px;
+        height: 48px;
+        font-size: 24px;
+    }
+
+    .admin-toolbar__found {
+        font-size: 20px;
+    }
+
+    .admin-table {
+        margin-top: 24px;
+        border-width: 3px;
+    }
+
+    .admin-table__head,
+    .admin-table__row {
+        grid-template-columns:
+            80px
+            minmax(120px, 2fr)
+            minmax(100px, 1.2fr)
+            minmax(90px, 1fr)
+            minmax(150px, 1.4fr);
+        gap: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .admin-table__head {
+        padding-top: 16px;
+        padding-bottom: 16px;
+        font-size: 20px;
+    }
+
+    .admin-table__row {
+        padding-top: 18px;
+        padding-bottom: 16px;
+        font-size: 22px;
+    }
+
+    .admin-table__actions {
+        gap: 24px;
+    }
+
+    .admin-table__action {
+        font-size: 22px;
+    }
+
+    .admin-table__action--muted {
+        font-size: 20px;
+    }
+
+    .admin-table__footer {
+        padding: 16px 20px;
+    }
+
+    .admin-table__found,
+    .admin-table__pagination {
+        font-size: 20px;
+    }
+
+    .admin-table__pagination {
+        gap: 24px;
+    }
+}
+
+@media (max-width: 1300px) {
+    .admin-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* ---------- 768–1100 ---------- */
+
+@media (max-width: 1100px) {
+    .admin {
+        display: block;
+    }
+
+    .admin__sidebar {
+        margin-bottom: 40px;
+    }
+
+    .admin__panel {
+        min-height: 0;
+    }
+
+    .admin__divider--status {
+        margin-top: 40px;
+    }
+
+    .admin__brand {
+        margin-top: 24px;
+    }
+}
+
+/* ---------- до 767 ---------- */
+
+@media (max-width: 767px) {
+    .page--admin {
+        padding-top: 20px;
+        padding-bottom: 32px;
+    }
+
+    .admin__sidebar {
+        margin-bottom: 32px;
+    }
+
+    .admin__heading {
+        font-size: 28px;
+    }
+
+    .admin__panel {
+        margin-top: 18px;
+        padding: 20px 16px;
+        border-width: 3px;
+    }
+
+    .admin__panel-title {
+        font-size: 24px;
+    }
+
+    .admin__panel-subtitle {
+        font-size: 18px;
+    }
+
+    .admin__divider {
+        margin-top: 18px;
+    }
+
+    .admin__nav {
+        gap: 18px;
+        margin-top: 20px;
+    }
+
+    .admin__nav-link {
+        font-size: 22px;
+    }
+
+    .admin__nav-link--active::before {
+        left: -19px;
+        height: 32px;
+    }
+
+    .admin__divider--status {
+        margin-top: 32px;
+    }
+
+    .admin__system {
+        margin-top: 22px;
+        font-size: 18px;
+    }
+
+    .admin__updated {
+        margin-top: 10px;
+        font-size: 16px;
+    }
+
+    .admin__brand {
+        margin-top: 22px;
+        font-size: 20px;
+    }
+
+    .admin__title {
+        font-size: 28px;
+    }
+
+    .admin__subtitle {
+        font-size: 16px;
+    }
+
+    .admin-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 20px;
+    }
+
+    .admin-stats__card {
+        min-height: 0;
+        padding: 14px;
+        border-width: 3px;
+    }
+
+    .admin-stats__label {
+        font-size: 16px;
+    }
+
+    .admin-stats__value {
+        margin-top: 10px;
+        font-size: 26px;
+    }
+
+    .admin-stats__value--revenue {
+        font-size: 20px;
+    }
+
+    .admin-lots-head {
+        margin-top: 24px;
+    }
+
+    .admin-lots-head__title {
+        font-size: 26px;
+    }
+
+    .button--admin-add {
+        width: 180px;
+        height: 44px;
+        border-width: 3px;
+        font-size: 18px;
+    }
+
+    .admin-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        margin-top: 20px;
+    }
+
+    .admin-toolbar__search {
+        width: 100%;
+        height: 50px;
+        font-size: 18px;
+    }
+
+    .admin-toolbar__status {
+        width: 100%;
+        height: 50px;
+        font-size: 20px;
+    }
+
+    .admin-toolbar__found {
+        margin-left: 0;
+        font-size: 16px;
+    }
+
+    .admin-table {
+        margin-top: 16px;
+        border: 0;
+        background: transparent;
+    }
+
+    .admin-table__head {
+        display: none;
+    }
+
+    .admin-table__row {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+        margin-bottom: 16px;
+        padding: 18px;
+        border: 3px solid var(--accent);
+        background: rgba(0, 0, 0, 0.88);
+        font-size: 18px;
+    }
+
+    .admin-table__row + .admin-table__row {
+        border-top: 3px solid var(--accent);
+    }
+
+    .admin-table__cell {
+        overflow: visible;
+        white-space: normal;
+    }
+
+    .admin-table__cell::before {
+        content: attr(data-label);
+        display: block;
+        color: #adb0c2;
+        font-size: 14px;
+        line-height: 1.18;
+    }
+
+    .admin-table__actions {
+        gap: 24px;
+        margin-top: 8px;
+    }
+
+    .admin-table__action {
+        font-size: 18px;
+    }
+
+    .admin-table__action--muted {
+        font-size: 16px;
+    }
+
+    .admin-table__footer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding: 18px;
+        border: 3px solid var(--accent);
+        background: rgba(0, 0, 0, 0.88);
+    }
+
+    .admin-table__found {
+        font-size: 16px;
+    }
+
+    .admin-table__pagination {
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 16px;
+    }
+
+    .admin-table__empty {
+        padding: 18px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 520px) {
+    .admin-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-lots-head {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .button--admin-add {
+        width: 100%;
+    }
+}

@@ -1,10 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
+from django.core.paginator import Paginator
 from django.core.validators import validate_email
+from django.db.models import Q, Sum
 from .models import Asteroid, SpectralClass, Composition, Order, Profile
 
 
@@ -78,7 +81,8 @@ def buy_asteroid(request, pk):
         asteroid = get_object_or_404(Asteroid, pk=pk, is_sold=False)
         Order.objects.create(user=request.user, asteroid=asteroid)
         asteroid.is_sold = True
-        asteroid.save()
+        asteroid.status = 'sold'
+        asteroid.save(update_fields=['is_sold', 'status'])
         return redirect('catalog')
     return redirect('asteroid_detail', pk=pk)
 
@@ -167,3 +171,39 @@ def profile(request):
             'orders': orders,
         },
     )
+
+
+@staff_member_required(login_url='login')
+def admin_panel(request):
+    query = request.GET.get('q', '').strip()
+    status = request.GET.get('status', 'all')
+
+    asteroids = Asteroid.objects.all().order_by('-id')
+    if query:
+        if query.isdigit():
+            asteroids = asteroids.filter(Q(title__icontains=query) | Q(pk=int(query)))
+        else:
+            asteroids = asteroids.filter(title__icontains=query)
+
+    if status in dict(Asteroid.STATUS_CHOICES):
+        asteroids = asteroids.filter(status=status)
+
+    found_count = asteroids.count()
+    paginator = Paginator(asteroids, 4)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
+    revenue = Order.objects.aggregate(total=Sum('asteroid__price'))['total'] or 0
+
+    context = {
+        'page_obj': page_obj,
+        'paginator': paginator,
+        'q': query,
+        'status': status,
+        'found_count': found_count,
+        'total_lots': Asteroid.objects.count(),
+        'active_orders': Order.objects.filter(status='in_transit').count(),
+        'users_count': User.objects.count(),
+        'revenue_display': f"{revenue:,}".replace(',', '.'),
+        'status_choices': Asteroid.STATUS_CHOICES,
+    }
+    return render(request, 'admin_panel.html', context)

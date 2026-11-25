@@ -25,6 +25,12 @@ class Composition(models.Model):
 
 
 class Asteroid(models.Model):
+    STATUS_CHOICES = [
+        ('in_sale', 'В продаже'),
+        ('sold', 'Продан'),
+        ('reserved', 'Резерв'),
+    ]
+
     title = models.CharField('Название', max_length=200)
     description = models.TextField('Описание')
     price = models.PositiveIntegerField('Цена (в крышках)')
@@ -42,6 +48,12 @@ class Asteroid(models.Model):
         verbose_name='Состав и теги'
     )
     is_sold = models.BooleanField('Продан', default=False)
+    status = models.CharField(
+        'Статус лота',
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='in_sale',
+    )
     created_at = models.DateTimeField('Дата добавления', auto_now_add=True)
 
     @property

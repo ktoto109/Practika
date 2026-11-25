@@ -70,6 +70,7 @@ def seed_asteroids():
             "spectral": "C-Type",
             "tags": ("углерод", "вода"),
             "sold": True,
+            "status": "sold",
         },
         {
             "title": "Голда",
@@ -79,6 +80,7 @@ def seed_asteroids():
             "spectral": "S-Type",
             "tags": ("руда", "платина"),
             "sold": False,
+            "status": "reserved",
         },
         {
             "title": "Шары",
@@ -126,6 +128,7 @@ def seed_asteroids():
             distance=lot["distance"],
             spectral_class=classes[lot["spectral"]],
             is_sold=lot["sold"],
+            status=lot.get("status", "in_sale"),
         )
         asteroid.compositions.set([compositions[tag] for tag in lot["tags"]])
 

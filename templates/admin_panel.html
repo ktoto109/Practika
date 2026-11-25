@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Админ-панель — Sarro{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'css/pages/admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container page page--admin">
+    <div class="admin">
+        <aside class="admin__sidebar">
+            <p class="admin__heading">Админ-панель</p>
+
+            <div class="admin__panel">
+                <p class="admin__panel-title">Управление Sarro</p>
+                <p class="admin__panel-subtitle">Администратор</p>
+
+                <div class="admin__divider"></div>
+
+                <nav class="admin__nav">
+                    <a href="#" class="admin__nav-link">Обзор</a>
+                    <a href="{% url 'admin_panel' %}" class="admin__nav-link admin__nav-link--active">Лоты</a>
+                    <a href="#" class="admin__nav-link">Заказы</a>
+                    <a href="#" class="admin__nav-link">Пользователи</a>
+                </nav>
+
+                <div class="admin__divider admin__divider--status"></div>
+
+                <p class="admin__system">Система работает штатно</p>
+                <p class="admin__updated">Обновлено сегодня, {% now "H:i" %}</p>
+            </div>
+
+            <p class="admin__brand">Sarro Orbital Mining</p>
+        </aside>
+
+        <section class="admin__main">
+            <h1 class="admin__title">Управление лотами</h1>
+            <p class="admin__subtitle">Реестр небесных тел и текущих предложений</p>
+
+            <div class="admin-stats">
+                <div class="admin-stats__card">
+                    <p class="admin-stats__label">Всего лотов</p>
+                    <p class="admin-stats__value">{{ total_lots }}</p>
+                </div>
+                <div class="admin-stats__card">
+                    <p class="admin-stats__label">Активных заказов</p>
+                    <p class="admin-stats__value">{{ active_orders }}</p>
+                </div>
+                <div class="admin-stats__card">
+                    <p class="admin-stats__label">Пользователей</p>
+                    <p class="admin-stats__value">{{ users_count }}</p>
+                </div>
+                <div class="admin-stats__card">
+                    <p class="admin-stats__label">Выручка, крышек</p>
+                    <p class="admin-stats__value admin-stats__value--revenue">{{ revenue_display }}</p>
+                </div>
+            </div>
+
+            <div class="admin-lots-head">
+                <h2 class="admin-lots-head__title">Лоты</h2>
+                <a href="#" class="button button--admin-add">+ Добавить лот</a>
+            </div>
+
+            <form method="get" class="admin-toolbar">
+                <input type="search"
+                       name="q"
+                       value="{{ q }}"
+                       placeholder="Поиск по названию или ID"
+                       class="admin-toolbar__search">
+
+                <label class="admin-toolbar__status">
+                    <span class="admin-toolbar__status-label">Статус:</span>
+                    <select name="status" class="admin-toolbar__select" onchange="this.form.submit()">
+                        <option value="all" {% if status == 'all' %}selected{% endif %}>все</option>
+                        {% for value, label in status_choices %}
+                            <option value="{{ value }}" {% if status == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+
+                <span class="admin-toolbar__found">Найдено: {{ found_count }}</span>
+            </form>
+
+            <section class="admin-table">
+                <div class="admin-table__head">
+                    <span class="admin-table__cell">ID</span>
+                    <span class="admin-table__cell">Название лота</span>
+                    <span class="admin-table__cell">Цена, крышек</span>
+                    <span class="admin-table__cell">Статус</span>
+                    <span class="admin-table__cell">Действия</span>
+                </div>
+
+                {% for asteroid in page_obj %}
+                    <div class="admin-table__row">
+                        <span class="admin-table__cell" data-label="ID">#{{ asteroid.pk }}</span>
+                        <span class="admin-table__cell" data-label="Название лота">{{ asteroid.title }}</span>
+                        <span class="admin-table__cell" data-label="Цена, крышек">{{ asteroid.price_display }}</span>
+                        <span class="admin-table__cell" data-label="Статус">{{ asteroid.get_status_display }}</span>
+                        <span class="admin-table__actions">
+                            <a href="#" class="admin-table__action">Изменить</a>
+                            <a href="#" class="admin-table__action admin-table__action--muted">Удалить</a>
+                        </span>
+                    </div>
+                {% empty %}
+                    <p class="admin-table__empty">Ничего не найдено.</p>
+                {% endfor %}
+
+                <div class="admin-table__footer">
+                    <span class="admin-table__found">
+                        Показано {{ page_obj.start_index }}–{{ page_obj.end_index }} из {{ paginator.count }}
+                    </span>
+
+                    <div class="admin-table__pagination">
+                        {% if page_obj.has_previous %}
+                            <a href="?page={{ page_obj.previous_page_number }}{% if q %}&q={{ q|urlencode }}{% endif %}{% if status != 'all' %}&status={{ status }}{% endif %}"
+                               class="admin-table__page-link">← Назад</a>
+                        {% else %}
+                            <span class="admin-table__page-link admin-table__page-link--disabled">← Назад</span>
+                        {% endif %}
+
+                        <span class="admin-table__page-current">{{ page_obj.number }} / {{ paginator.num_pages }}</span>
+
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}{% if q %}&q={{ q|urlencode }}{% endif %}{% if status != 'all' %}&status={{ status }}{% endif %}"
+                               class="admin-table__page-link">Далее →</a>
+                        {% else %}
+                            <span class="admin-table__page-link admin-table__page-link--disabled">Далее →</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+        </section>
+    </div>
+</div>
+{% endblock %}

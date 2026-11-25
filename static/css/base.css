@@ -1,0 +1,240 @@
+:root {
+    --accent: #302bc0;
+    --accent-bright: #5049ff;
+    --white: #ffffff;
+    --black: #000000;
+    --panel: rgba(0, 0, 0, 0.74);
+    --panel-soft: rgba(0, 0, 0, 0.51);
+    --placeholder: #d9d9d9;
+    --font-display: "Pixelify Sans", "Courier New", monospace;
+    --font-body: "WDXL Lubrifont SC", "Courier New", monospace;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    background: var(--black);
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 36px;
+    line-height: 1.18;
+    font-synthesis: none;
+    background: var(--black) url("../img/bg.png") center top / cover no-repeat fixed;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+p {
+    margin: 0;
+    font-weight: 400;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+    color: inherit;
+}
+
+/* ---------- Layout ---------- */
+
+.container {
+    width: min(1720px, calc(100% - clamp(48px, 8vw, 180px)));
+    margin: 0 auto;
+}
+
+/* ---------- Header ---------- */
+
+.header {
+    border-bottom: 7px solid var(--accent);
+}
+
+.header__inner {
+    height: 92px;
+    padding-top: 17px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.header__logo {
+    flex: none;
+    font-family: var(--font-display);
+    font-size: 48px;
+    line-height: 1.2;
+    letter-spacing: 0;
+}
+
+.header__nav {
+    display: flex;
+    gap: 86px;
+    margin-left: 157px;
+    padding-top: 12px;
+}
+
+.header__nav-link {
+    font-size: 36px;
+    line-height: 1.18;
+    transition: color 0.15s ease;
+}
+
+.header__nav-link:hover {
+    color: var(--accent-bright);
+}
+
+.header__auth {
+    display: flex;
+    align-items: flex-start;
+    gap: 69px;
+    margin-left: auto;
+    padding-top: 8px;
+}
+
+/* ---------- Button ---------- */
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 5px solid var(--accent);
+    background: transparent;
+    font-size: 36px;
+    line-height: 1;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.button:hover {
+    background: var(--accent);
+}
+
+.button--header {
+    min-width: 110px;
+    height: 53px;
+    padding: 0 20px;
+}
+
+.button--wide {
+    min-width: 117px;
+}
+
+/* ---------- 1200–1599 ---------- */
+
+@media (max-width: 1599px) {
+    .header {
+        border-bottom-width: 5px;
+    }
+
+    .header__inner {
+        height: 93px;
+        padding-top: 20px;
+    }
+
+    .header__nav {
+        gap: 70px;
+        margin-left: 49px;
+        padding-top: 10px;
+    }
+
+    .header__nav-link {
+        font-size: 32px;
+    }
+
+    .header__auth {
+        gap: 24px;
+        padding-top: 3px;
+    }
+
+    .button--header {
+        min-width: 112px;
+        height: 52px;
+        padding: 0 8px;
+        font-size: 30px;
+    }
+
+    .button--wide {
+        min-width: 112px;
+    }
+}
+
+/* ---------- до 767 ---------- */
+
+@media (max-width: 767px) {
+    body {
+        font-size: 16px;
+        background-attachment: scroll;
+    }
+
+    .header {
+        border-bottom-width: 5px;
+    }
+
+    .header__inner {
+        height: auto;
+        padding: 12px 0;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+            "logo auth"
+            "nav nav";
+        align-items: center;
+        row-gap: 12px;
+    }
+
+    .header__logo {
+        grid-area: logo;
+        font-size: 32px;
+    }
+
+    .header__nav {
+        grid-area: nav;
+        margin-left: 0;
+        padding-top: 0;
+        gap: 24px;
+    }
+
+    .header__nav-link {
+        font-size: 24px;
+    }
+
+    .header__auth {
+        grid-area: auth;
+        gap: 12px;
+        padding-top: 0;
+    }
+
+    .button {
+        border-width: 3px;
+    }
+
+    .button--header {
+        min-width: 76px;
+        height: 44px;
+        padding: 0 8px;
+        font-size: 22px;
+    }
+
+    .button--wide {
+        min-width: 78px;
+    }
+}

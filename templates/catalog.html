@@ -1,1 +1,132 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}Каталог — Sarro{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'css/pages/catalog.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container page page--catalog">
+    <form method="get" class="catalog" id="catalog-form">
+        <div class="catalog__toolbar">
+            <label class="catalog__sort">
+                <span class="catalog__sort-label">Сортировка:</span>
+                <select name="sort" class="catalog__sort-select" onchange="this.form.submit()">
+                    <option value="price_asc" {% if sort_by == 'price_asc' %}selected{% endif %}>По цене</option>
+                    <option value="price_desc" {% if sort_by == 'price_desc' %}selected{% endif %}>По цене ↓</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="catalog__body">
+            <aside class="filters">
+                <div class="filters__panel">
+                    <h1 class="filters__title">Фильтры</h1>
+
+                    <div class="filters__group">
+                        <p class="filters__label">Состав:</p>
+                        <div class="filters__checkboxes filters__checkboxes--columns">
+                            {% for composition in compositions %}
+                                <label class="filters__option">
+                                    <input type="checkbox"
+                                           name="composition"
+                                           value="{{ composition.id }}"
+                                           class="filters__checkbox"
+                                           {% if composition.id in selected_compositions %}checked{% endif %}>
+                                    <span class="filters__option-text">{{ composition.name }}</span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="filters__group">
+                        <p class="filters__label">Расстояние:</p>
+                        <div class="filters__distance">
+                            <label class="filters__distance-row">
+                                <span class="filters__distance-label">От:</span>
+                                <input type="number"
+                                       name="dist_from"
+                                       value="{{ dist_from }}"
+                                       min="0"
+                                       class="filters__input">
+                                <span class="filters__unit">км</span>
+                            </label>
+                            <label class="filters__distance-row">
+                                <span class="filters__distance-label">До:</span>
+                                <input type="number"
+                                       name="dist_to"
+                                       value="{{ dist_to }}"
+                                       min="0"
+                                       class="filters__input">
+                                <span class="filters__unit">км</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filters__group">
+                        <p class="filters__label">Спектральный класс:</p>
+                        <div class="filters__checkboxes">
+                            {% for spectral_class in spectral_classes %}
+                                <label class="filters__option">
+                                    <input type="checkbox"
+                                           name="spectral_class"
+                                           value="{{ spectral_class.id }}"
+                                           class="filters__checkbox"
+                                           {% if spectral_class.id in selected_classes %}checked{% endif %}>
+                                    <span class="filters__option-text">{{ spectral_class.name }}</span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="filters__actions">
+                        <a href="{% url 'catalog' %}" class="button button--filter">Сбросить</a>
+                        <button type="submit" class="button button--filter">Применить</button>
+                    </div>
+                </div>
+
+                <div class="filters__brand">
+                    <p class="filters__brand-title">Sarro Orbital Mining</p>
+                    <p class="filters__brand-text">Ваш участок космоса — под контролем.</p>
+                </div>
+            </aside>
+
+            <section class="catalog-list">
+                {% for asteroid in asteroids %}
+                    <article class="catalog-card">
+                        <a href="{% url 'asteroid_detail' asteroid.pk %}" class="catalog-card__image-link">
+                            {% if asteroid.image %}
+                                <img src="{{ asteroid.image.url }}"
+                                     alt="{{ asteroid.title }}"
+                                     class="catalog-card__image">
+                            {% else %}
+                                <span class="catalog-card__image catalog-card__image--empty"></span>
+                            {% endif %}
+                        </a>
+
+                        <div class="catalog-card__content">
+                            <h2 class="catalog-card__title">
+                                <a href="{% url 'asteroid_detail' asteroid.pk %}" class="catalog-card__title-link">
+                                    {{ asteroid.title }}
+                                </a>
+                            </h2>
+                            <p class="catalog-card__desc">{{ asteroid.description }}</p>
+
+                            <div class="catalog-card__bottom">
+                                <span class="catalog-card__price">{{ asteroid.price_display }} крышек</span>
+                                <a href="{% url 'asteroid_detail' asteroid.pk %}" class="button button--details">
+                                    Подробнее
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                {% empty %}
+                    <p class="catalog-list__empty">По выбранным фильтрам ничего не найдено.</p>
+                {% endfor %}
+            </section>
+        </div>
+    </form>
+</div>
+{% endblock %}

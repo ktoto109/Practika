@@ -1,1 +1,54 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ asteroid.title }} — Sarro{% endblock %}
+
+{% block body_class %}body--card{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'css/pages/detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container page page--card">
+    <article class="card-detail">
+        <div class="card-detail__media">
+            {% if asteroid.image %}
+                <img src="{{ asteroid.image.url }}"
+                     alt="{{ asteroid.title }}"
+                     class="card-detail__image">
+            {% else %}
+                <span class="card-detail__image card-detail__image--empty"></span>
+            {% endif %}
+        </div>
+
+        <div class="card-detail__content">
+            <h1 class="card-detail__title">{{ asteroid.title }}</h1>
+
+            <div class="card-detail__tags">
+                {% if asteroid.spectral_class %}
+                    <span class="card-detail__tag">{{ asteroid.spectral_class.name }}</span>
+                {% endif %}
+                {% for composition in asteroid.compositions.all|slice:":1" %}
+                    <span class="card-detail__tag">{{ composition.name }}</span>
+                {% endfor %}
+            </div>
+
+            <p class="card-detail__desc">{{ asteroid.description }}</p>
+
+            <div class="card-detail__bottom">
+                <p class="card-detail__price">{{ asteroid.price_display }} крышек</p>
+
+                {% if asteroid.is_sold %}
+                    <button type="button" class="button button--buy" disabled>Продан</button>
+                {% else %}
+                    <form method="post" action="{% url 'buy_asteroid' asteroid.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="button button--buy">Купить</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </article>
+</div>
+{% endblock %}

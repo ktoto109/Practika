@@ -57,13 +57,54 @@ class Asteroid(models.Model):
 
 
 class Order(models.Model):
+    STATUS_CHOICES = [
+        ('in_transit', 'В доставке'),
+        ('completed', 'Завершён'),
+    ]
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Покупатель')
     asteroid = models.ForeignKey(Asteroid, on_delete=models.CASCADE, verbose_name='Астероид')
+    code = models.CharField('Номер заказа', max_length=20, blank=True)
+    status = models.CharField(
+        'Статус',
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='in_transit',
+    )
     created_at = models.DateTimeField('Дата покупки', auto_now_add=True)
 
+    @property
+    def display_code(self):
+        return self.code or f"#SO-{self.pk:04d}"
+
     def __str__(self):
-        return f"Заказ #{self.id} — {self.asteroid.title} ({self.user.email})"
+        return f"{self.display_code} — {self.asteroid.title} ({self.user.email})"
 
     class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='profile',
+        verbose_name='Пользователь',
+    )
+    balance = models.PositiveIntegerField('Баланс (в крышках)', default=8_400_000)
+
+    @property
+    def balance_display(self):
+        return f"{self.balance:,}".replace(",", ".")
+
+    @property
+    def colonist_number(self):
+        return f"{self.user_id + 321:05d}"
+
+    def __str__(self):
+        return f"Профиль {self.user.username}"
+
+    class Meta:
+        verbose_name = 'Профиль'
+        verbose_name_plural = 'Профили'

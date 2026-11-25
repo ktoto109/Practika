@@ -1,0 +1,52 @@
+/* ---------- Регистрация ---------- */
+
+.page--register {
+    padding-top: 86px;
+    padding-bottom: 64px;
+}
+
+.auth-panel--register {
+    padding-top: 34px;
+}
+
+.auth-form--register .auth-form__rows {
+    margin-bottom: 100px;
+}
+
+.button--auth--register {
+    width: 311px;
+}
+
+/* ---------- 1200–1599 ---------- */
+
+@media (max-width: 1599px) {
+    .page--register {
+        padding-top: 62px;
+        padding-bottom: 48px;
+    }
+
+    .auth-panel--register {
+        padding-top: 36px;
+    }
+
+    .auth-form--register .auth-form__rows {
+        margin-bottom: 0;
+    }
+
+    .button--auth--register {
+        width: 100%;
+    }
+}
+
+/* ---------- до 767 ---------- */
+
+@media (max-width: 767px) {
+    .page--register {
+        padding-top: 16px;
+        padding-bottom: 32px;
+    }
+
+    .auth-panel--register {
+        padding-top: 24px;
+    }
+}

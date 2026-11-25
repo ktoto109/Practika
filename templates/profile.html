@@ -1,1 +1,118 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}Личный кабинет — Sarro{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'css/pages/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container page page--profile">
+    <div class="profile">
+        <aside class="profile__sidebar">
+            <p class="profile__heading">Личный кабинет</p>
+
+            <div class="profile__panel">
+                <p class="profile__codename">Колонист #{{ profile.colonist_number }}</p>
+                <p class="profile__status">
+                    {% if user.is_active %}Аккаунт подтверждён{% else %}Аккаунт не подтверждён{% endif %}
+                </p>
+
+                <div class="profile__divider"></div>
+
+                <nav class="profile__nav">
+                    <a href="#account" class="profile__nav-link profile__nav-link--active">Профиль</a>
+                    <a href="#orders" class="profile__nav-link">Мои заказы</a>
+                    <a href="#" class="profile__nav-link">Безопасность</a>
+                </nav>
+
+                <div class="profile__divider"></div>
+
+                <p class="profile__balance-label">Баланс</p>
+                <p class="profile__balance">{{ profile.balance_display }}</p>
+                <p class="profile__balance-unit">крышек</p>
+            </div>
+
+            <div class="profile__brand">
+                <p class="profile__brand-title">Sarro Orbital Mining</p>
+                <p class="profile__brand-text">Ваш участок космоса — под контролем.</p>
+            </div>
+        </aside>
+
+        <section class="profile__main">
+            <h1 class="profile__title">Профиль</h1>
+
+            {% if messages %}
+                <div class="profile__messages">
+                    {% for message in messages %}
+                        <p class="profile__message profile__message--{{ message.tags }}">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <section id="account" class="account-panel">
+                <h2 class="account-panel__title">Данные аккаунта</h2>
+
+                <form method="post" action="{% url 'profile' %}" class="account-form">
+                    {% csrf_token %}
+
+                    <div class="account-form__row">
+                        <label class="account-form__field">
+                            <span class="account-form__label">Имя</span>
+                            <input type="text"
+                                   name="name"
+                                   class="account-form__input"
+                                   value="{{ user.first_name|default:user.username }}"
+                                   required>
+                        </label>
+
+                        <label class="account-form__field">
+                            <span class="account-form__label">Email</span>
+                            <input type="email"
+                                   name="email"
+                                   class="account-form__input"
+                                   value="{{ user.email }}"
+                                   required>
+                        </label>
+                    </div>
+
+                    <div class="account-form__footer">
+                        <p class="account-form__since">
+                            На станции с {{ user.date_joined|date:"j E Y" }}
+                        </p>
+                        <button type="submit" class="button button--save">Сохранить изменения</button>
+                    </div>
+                </form>
+            </section>
+
+            <div class="orders-head">
+                <h2 class="orders-head__title">Мои заказы</h2>
+                <a href="#orders" class="orders-head__link">Все заказы</a>
+            </div>
+
+            <section id="orders" class="orders">
+                <div class="orders__head">
+                    <span class="orders__cell">Заказ</span>
+                    <span class="orders__cell">Лот</span>
+                    <span class="orders__cell">Стоимость</span>
+                    <span class="orders__cell">Дата</span>
+                    <span class="orders__cell">Статус</span>
+                </div>
+
+                {% for order in orders %}
+                    <div class="orders__row">
+                        <span class="orders__cell" data-label="Заказ">{{ order.display_code }}</span>
+                        <span class="orders__cell" data-label="Лот">Астероид «{{ order.asteroid.title }}»</span>
+                        <span class="orders__cell" data-label="Стоимость">{{ order.asteroid.price_display }}</span>
+                        <span class="orders__cell" data-label="Дата">{{ order.created_at|date:"d.m.Y" }}</span>
+                        <span class="orders__cell" data-label="Статус">{{ order.get_status_display }}</span>
+                    </div>
+                {% empty %}
+                    <p class="orders__empty">Заказов пока нет.</p>
+                {% endfor %}
+            </section>
+        </section>
+    </div>
+</div>
+{% endblock %}

@@ -1,1 +1,47 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}Вход — Sarro{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'css/components/auth.css' %}">
+<link rel="stylesheet" href="{% static 'css/pages/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container page page--login">
+    <section class="auth-panel">
+        <h1 class="auth-panel__title">Вход</h1>
+
+        {% if error %}
+            <p class="auth-panel__error">{{ error }}</p>
+        {% endif %}
+
+        <form method="post" action="{% url 'login' %}" class="auth-form">
+            {% csrf_token %}
+
+            <div class="auth-form__rows">
+                <label class="auth-form__field">
+                    <span class="auth-form__label">логин</span>
+                    <input type="text"
+                           name="email"
+                           class="auth-form__input"
+                           autocomplete="username"
+                           required>
+                </label>
+
+                <label class="auth-form__field">
+                    <span class="auth-form__label">пароль</span>
+                    <input type="password"
+                           name="password"
+                           class="auth-form__input"
+                           autocomplete="current-password"
+                           required>
+                </label>
+            </div>
+
+            <button type="submit" class="button button--auth">Вход</button>
+        </form>
+    </section>
+</div>
+{% endblock %}

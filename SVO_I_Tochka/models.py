@@ -60,6 +60,13 @@ class Asteroid(models.Model):
     def price_display(self):
         return f"{self.price:,}".replace(",", ".")
 
+    def save(self, *args, **kwargs):
+        self.is_sold = self.status == 'sold'
+        update_fields = kwargs.get('update_fields')
+        if update_fields is not None:
+            kwargs['update_fields'] = set(update_fields) | {'is_sold'}
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.title} ({self.price_display} крышек)"
 

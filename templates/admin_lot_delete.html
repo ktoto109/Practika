@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Удалить лот — Sarro{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'css/pages/admin.css' %}">
+<link rel="stylesheet" href="{% static 'css/pages/admin_form.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container page page--admin">
+    <div class="admin">
+        {% include "includes/admin_sidebar.html" with active="lots" %}
+
+        <section class="admin__main">
+            <h1 class="admin__title">Удалить лот</h1>
+            <p class="admin__subtitle">Это действие нельзя отменить</p>
+
+            <div class="admin-delete">
+                <p class="admin-delete__text">Удалить лот «{{ asteroid.title }}»?</p>
+                <p class="admin-delete__meta">ID #{{ asteroid.pk }} · {{ asteroid.price_display }} крышек</p>
+                <p class="admin-delete__warning">
+                    Вместе с лотом удалятся связанные заказы, если они есть.
+                </p>
+
+                <form method="post" class="admin-delete__actions">
+                    {% csrf_token %}
+                    <button type="submit" class="button button--admin-danger">Удалить</button>
+                    <a href="{% url 'admin_panel' %}" class="button button--admin-cancel">Отмена</a>
+                </form>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

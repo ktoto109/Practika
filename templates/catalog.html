@@ -97,13 +97,9 @@
                 {% for asteroid in asteroids %}
                     <article class="catalog-card">
                         <a href="{% url 'asteroid_detail' asteroid.pk %}" class="catalog-card__image-link">
-                            {% if asteroid.image %}
-                                <img src="{{ asteroid.image.url }}"
-                                     alt="{{ asteroid.title }}"
-                                     class="catalog-card__image">
-                            {% else %}
-                                <span class="catalog-card__image catalog-card__image--empty"></span>
-                            {% endif %}
+                            <img src="{{ asteroid.image.url }}"
+                                 alt="{{ asteroid.title }}"
+                                 class="catalog-card__image">
                         </a>
 
                         <div class="catalog-card__content">

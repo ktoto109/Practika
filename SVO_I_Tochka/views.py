@@ -7,7 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.core.validators import validate_email
-from django.db.models import Q, Sum
+from django.db.models import Count, Q, Sum
+from .forms import AsteroidForm
 from .models import Asteroid, SpectralClass, Composition, Order, Profile
 
 
@@ -207,3 +208,161 @@ def admin_panel(request):
         'status_choices': Asteroid.STATUS_CHOICES,
     }
     return render(request, 'admin_panel.html', context)
+
+
+@staff_member_required(login_url='login')
+def admin_lot_add(request):
+    form = AsteroidForm(request.POST or None, request.FILES or None)
+
+    if request.method == 'POST' and form.is_valid():
+        asteroid = form.save(commit=False)
+        asteroid.is_sold = asteroid.status == 'sold'
+        asteroid.save()
+        form.save_m2m()
+        messages.success(request, f'Лот «{asteroid.title}» добавлен.')
+        return redirect('admin_panel')
+
+    return render(
+        request,
+        'admin_lot_form.html',
+        {
+            'form': form,
+            'is_edit': False,
+        },
+    )
+
+
+@staff_member_required(login_url='login')
+def admin_lot_edit(request, pk):
+    asteroid = get_object_or_404(Asteroid, pk=pk)
+    old_image = asteroid.image if asteroid.image else None
+    old_image_name = old_image.name if old_image else None
+    form = AsteroidForm(request.POST or None, request.FILES or None, instance=asteroid)
+
+    if request.method == 'POST' and form.is_valid():
+        asteroid = form.save(commit=False)
+        asteroid.is_sold = asteroid.status == 'sold'
+        asteroid.save()
+        form.save_m2m()
+
+        new_image_name = asteroid.image.name if asteroid.image else None
+        if old_image and old_image_name != new_image_name:
+            old_image.delete(save=False)
+
+        messages.success(request, f'Лот «{asteroid.title}» сохранён.')
+        return redirect('admin_panel')
+
+    return render(
+        request,
+        'admin_lot_form.html',
+        {
+            'form': form,
+            'asteroid': asteroid,
+            'is_edit': True,
+        },
+    )
+
+
+@staff_member_required(login_url='login')
+def admin_lot_delete(request, pk):
+    asteroid = get_object_or_404(Asteroid, pk=pk)
+
+    if request.method == 'POST':
+        title = asteroid.title
+        image = asteroid.image if asteroid.image else None
+        asteroid.delete()
+        if image:
+            image.delete(save=False)
+        messages.success(request, f'Лот «{title}» удалён.')
+        return redirect('admin_panel')
+
+    return render(request, 'admin_lot_delete.html', {'asteroid': asteroid})
+
+
+@staff_member_required(login_url='login')
+def admin_orders(request):
+    query = request.GET.get('q', '').strip()
+    status = request.GET.get('status', 'all')
+
+    orders = Order.objects.select_related('user', 'asteroid').order_by('-created_at')
+    if query:
+        orders = orders.filter(
+            Q(code__icontains=query)
+            | Q(user__username__icontains=query)
+            | Q(user__email__icontains=query)
+            | Q(asteroid__title__icontains=query)
+        )
+
+    if status in dict(Order.STATUS_CHOICES):
+        orders = orders.filter(status=status)
+
+    found_count = orders.count()
+    paginator = Paginator(orders, 6)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
+    revenue = Order.objects.aggregate(total=Sum('asteroid__price'))['total'] or 0
+
+    context = {
+        'page_obj': page_obj,
+        'paginator': paginator,
+        'q': query,
+        'status': status,
+        'found_count': found_count,
+        'total_orders': Order.objects.count(),
+        'in_transit_count': Order.objects.filter(status='in_transit').count(),
+        'completed_count': Order.objects.filter(status='completed').count(),
+        'revenue_display': f"{revenue:,}".replace(',', '.'),
+        'status_choices': Order.STATUS_CHOICES,
+    }
+    return render(request, 'admin_orders.html', context)
+
+
+@staff_member_required(login_url='login')
+def admin_order_toggle(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+
+    if request.method == 'POST':
+        order.status = 'completed' if order.status == 'in_transit' else 'in_transit'
+        order.save(update_fields=['status'])
+        messages.success(request, f'Статус заказа {order.display_code} изменён.')
+
+    return redirect('admin_orders')
+
+
+@staff_member_required(login_url='login')
+def admin_users(request):
+    query = request.GET.get('q', '').strip()
+    role = request.GET.get('role', 'all')
+
+    for user in User.objects.all():
+        Profile.objects.get_or_create(user=user)
+
+    users = User.objects.select_related('profile').annotate(orders_count=Count('order')).order_by('id')
+    if query:
+        users = users.filter(
+            Q(username__icontains=query)
+            | Q(email__icontains=query)
+            | Q(first_name__icontains=query)
+        )
+
+    if role == 'staff':
+        users = users.filter(is_staff=True)
+    elif role == 'colonists':
+        users = users.filter(is_staff=False)
+
+    found_count = users.count()
+    paginator = Paginator(users, 8)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
+    context = {
+        'page_obj': page_obj,
+        'paginator': paginator,
+        'q': query,
+        'role': role,
+        'found_count': found_count,
+        'total_users': User.objects.count(),
+        'staff_count': User.objects.filter(is_staff=True).count(),
+        'colonist_count': User.objects.filter(is_staff=False).count(),
+        'total_orders': Order.objects.count(),
+    }
+    return render(request, 'admin_users.html', context)

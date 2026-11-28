@@ -10,34 +10,19 @@
 {% block content %}
 <div class="container page page--admin">
     <div class="admin">
-        <aside class="admin__sidebar">
-            <p class="admin__heading">Админ-панель</p>
-
-            <div class="admin__panel">
-                <p class="admin__panel-title">Управление Sarro</p>
-                <p class="admin__panel-subtitle">Администратор</p>
-
-                <div class="admin__divider"></div>
-
-                <nav class="admin__nav">
-                    <a href="#" class="admin__nav-link">Обзор</a>
-                    <a href="{% url 'admin_panel' %}" class="admin__nav-link admin__nav-link--active">Лоты</a>
-                    <a href="#" class="admin__nav-link">Заказы</a>
-                    <a href="#" class="admin__nav-link">Пользователи</a>
-                </nav>
-
-                <div class="admin__divider admin__divider--status"></div>
-
-                <p class="admin__system">Система работает штатно</p>
-                <p class="admin__updated">Обновлено сегодня, {% now "H:i" %}</p>
-            </div>
-
-            <p class="admin__brand">Sarro Orbital Mining</p>
-        </aside>
+        {% include "includes/admin_sidebar.html" with active="lots" %}
 
         <section class="admin__main">
             <h1 class="admin__title">Управление лотами</h1>
             <p class="admin__subtitle">Реестр небесных тел и текущих предложений</p>
+
+            {% if messages %}
+                <div class="admin__messages">
+                    {% for message in messages %}
+                        <p class="admin__message admin__message--{{ message.tags }}">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
 
             <div class="admin-stats">
                 <div class="admin-stats__card">
@@ -60,7 +45,7 @@
 
             <div class="admin-lots-head">
                 <h2 class="admin-lots-head__title">Лоты</h2>
-                <a href="#" class="button button--admin-add">+ Добавить лот</a>
+                <a href="{% url 'admin_lot_add' %}" class="button button--admin-add">+ Добавить лот</a>
             </div>
 
             <form method="get" class="admin-toolbar">
@@ -99,8 +84,8 @@
                         <span class="admin-table__cell" data-label="Цена, крышек">{{ asteroid.price_display }}</span>
                         <span class="admin-table__cell" data-label="Статус">{{ asteroid.get_status_display }}</span>
                         <span class="admin-table__actions">
-                            <a href="#" class="admin-table__action">Изменить</a>
-                            <a href="#" class="admin-table__action admin-table__action--muted">Удалить</a>
+                            <a href="{% url 'admin_lot_edit' asteroid.pk %}" class="admin-table__action">Изменить</a>
+                            <a href="{% url 'admin_lot_delete' asteroid.pk %}" class="admin-table__action admin-table__action--muted">Удалить</a>
                         </span>
                     </div>
                 {% empty %}

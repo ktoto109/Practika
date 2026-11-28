@@ -121,6 +121,26 @@
     line-height: 1.18;
 }
 
+.admin__messages {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 18px;
+}
+
+.admin__message {
+    font-size: 20px;
+    line-height: 1.18;
+}
+
+.admin__message--success {
+    color: #8dffad;
+}
+
+.admin__message--error {
+    color: #ff6b6b;
+}
+
 .admin-stats {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -316,6 +336,56 @@
     font-size: 26px;
 }
 
+.admin-table__action--button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.admin-table__badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 0 8px;
+    border: 2px solid var(--accent);
+    font-size: 18px;
+    line-height: 1.18;
+    white-space: nowrap;
+}
+
+.admin-table__badge--muted {
+    border-color: #adb0c2;
+    color: #adb0c2;
+}
+
+.admin-table--orders .admin-table__head,
+.admin-table--orders .admin-table__row {
+    grid-template-columns:
+        110px
+        minmax(120px, 1.2fr)
+        minmax(140px, 1.5fr)
+        minmax(100px, 1fr)
+        minmax(90px, 0.9fr)
+        minmax(100px, 1fr)
+        minmax(120px, 1.1fr);
+}
+
+.admin-table--users .admin-table__head,
+.admin-table--users .admin-table__row {
+    grid-template-columns:
+        60px
+        minmax(130px, 1.3fr)
+        minmax(160px, 1.6fr)
+        minmax(100px, 1fr)
+        80px
+        120px
+        100px;
+}
+
 .admin-table__empty {
     padding: 24px;
     color: #adb0c2;
@@ -503,6 +573,30 @@
         gap: 10px;
         padding-left: 20px;
         padding-right: 20px;
+    }
+
+    .admin-table--orders .admin-table__head,
+    .admin-table--orders .admin-table__row {
+        grid-template-columns:
+            80px
+            minmax(90px, 1fr)
+            minmax(110px, 1.4fr)
+            minmax(80px, 0.9fr)
+            minmax(70px, 0.8fr)
+            minmax(80px, 0.9fr)
+            minmax(90px, 1fr);
+    }
+
+    .admin-table--users .admin-table__head,
+    .admin-table--users .admin-table__row {
+        grid-template-columns:
+            45px
+            minmax(100px, 1.2fr)
+            minmax(130px, 1.6fr)
+            minmax(80px, 0.9fr)
+            60px
+            100px
+            80px;
     }
 
     .admin-table__head {

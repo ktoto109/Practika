@@ -32,6 +32,12 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('profile/', views.profile, name='profile'),
     path('admin-panel/', views.admin_panel, name='admin_panel'),
+    path('admin-panel/lots/add/', views.admin_lot_add, name='admin_lot_add'),
+    path('admin-panel/lots/<int:pk>/edit/', views.admin_lot_edit, name='admin_lot_edit'),
+    path('admin-panel/lots/<int:pk>/delete/', views.admin_lot_delete, name='admin_lot_delete'),
+    path('admin-panel/orders/', views.admin_orders, name='admin_orders'),
+    path('admin-panel/orders/<int:pk>/toggle/', views.admin_order_toggle, name='admin_order_toggle'),
+    path('admin-panel/users/', views.admin_users, name='admin_users'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

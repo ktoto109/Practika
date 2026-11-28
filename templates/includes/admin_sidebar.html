@@ -1,0 +1,27 @@
+<aside class="admin__sidebar">
+    <p class="admin__heading">Админ-панель</p>
+
+    <div class="admin__panel">
+        <p class="admin__panel-title">Управление Sarro</p>
+        <p class="admin__panel-subtitle">Администратор</p>
+
+        <div class="admin__divider"></div>
+
+        <nav class="admin__nav">
+            <a href="{% url 'admin_panel' %}" class="admin__nav-link">Обзор</a>
+            <a href="{% url 'admin_panel' %}"
+               class="admin__nav-link{% if active == 'lots' %} admin__nav-link--active{% endif %}">Лоты</a>
+            <a href="{% url 'admin_orders' %}"
+               class="admin__nav-link{% if active == 'orders' %} admin__nav-link--active{% endif %}">Заказы</a>
+            <a href="{% url 'admin_users' %}"
+               class="admin__nav-link{% if active == 'users' %} admin__nav-link--active{% endif %}">Пользователи</a>
+        </nav>
+
+        <div class="admin__divider admin__divider--status"></div>
+
+        <p class="admin__system">Система работает штатно</p>
+        <p class="admin__updated">Обновлено сегодня, {% now "H:i" %}</p>
+    </div>
+
+    <p class="admin__brand">Sarro Orbital Mining</p>
+</aside>

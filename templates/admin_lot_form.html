@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{% if is_edit %}Редактировать лот{% else %}Добавить лот{% endif %} — Sarro{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'css/pages/admin.css' %}">
+<link rel="stylesheet" href="{% static 'css/pages/admin_form.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container page page--admin">
+    <div class="admin">
+        {% include "includes/admin_sidebar.html" with active="lots" %}
+
+        <section class="admin__main">
+            <h1 class="admin__title">
+                {% if is_edit %}Редактировать лот{% else %}Добавить лот{% endif %}
+            </h1>
+            <p class="admin__subtitle">
+                {% if is_edit %}Измените данные лота и сохраните изменения{% else %}Заполните данные нового лота{% endif %}
+            </p>
+
+            <form method="post" enctype="multipart/form-data" class="admin-form">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="admin-form__errors">{{ form.non_field_errors }}</div>
+                {% endif %}
+
+                <div class="admin-form__panel">
+                    <div class="admin-form__field">
+                        <label class="admin-form__label" for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+                        {{ form.title }}
+                        {{ form.title.errors }}
+                    </div>
+
+                    <div class="admin-form__field">
+                        <label class="admin-form__label" for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                        {{ form.description }}
+                        {{ form.description.errors }}
+                    </div>
+
+                    <div class="admin-form__row">
+                        <div class="admin-form__field">
+                            <label class="admin-form__label" for="{{ form.price.id_for_label }}">{{ form.price.label }}</label>
+                            {{ form.price }}
+                            {{ form.price.errors }}
+                        </div>
+                        <div class="admin-form__field">
+                            <label class="admin-form__label" for="{{ form.distance.id_for_label }}">{{ form.distance.label }}</label>
+                            {{ form.distance }}
+                            {{ form.distance.errors }}
+                        </div>
+                    </div>
+
+                    <div class="admin-form__row">
+                        <div class="admin-form__field">
+                            <label class="admin-form__label" for="{{ form.spectral_class.id_for_label }}">{{ form.spectral_class.label }}</label>
+                            {{ form.spectral_class }}
+                            {{ form.spectral_class.errors }}
+                        </div>
+                        <div class="admin-form__field">
+                            <label class="admin-form__label" for="{{ form.status.id_for_label }}">{{ form.status.label }}</label>
+                            {{ form.status }}
+                            {{ form.status.errors }}
+                            <p class="admin-form__hint">Статус «Продан» скрывает лот из каталога.</p>
+                        </div>
+                    </div>
+
+                    <div class="admin-form__field">
+                        <span class="admin-form__label">{{ form.compositions.label }}</span>
+                        <div class="admin-form__checks">
+                            {% for checkbox in form.compositions %}
+                                <label class="admin-form__check">
+                                    {{ checkbox.tag }}
+                                    <span>{{ checkbox.choice_label }}</span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                        {{ form.compositions.errors }}
+                    </div>
+
+                    <div class="admin-form__field">
+                        <span class="admin-form__label">{{ form.image.label }}</span>
+                        {% if is_edit and asteroid.image %}
+                            <img src="{{ asteroid.image.url }}" alt="{{ asteroid.title }}" class="admin-form__preview">
+                        {% endif %}
+                        {{ form.image }}
+                        <p class="admin-form__hint">Фото обязательно. При редактировании можно загрузить новое.</p>
+                        {{ form.image.errors }}
+                    </div>
+                </div>
+
+                <div class="admin-form__actions">
+                    <button type="submit" class="button button--admin-save">Сохранить</button>
+                    <a href="{% url 'admin_panel' %}" class="button button--admin-cancel">Отмена</a>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+{% endblock %}

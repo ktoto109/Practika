@@ -38,13 +38,9 @@
                 {% for asteroid in asteroids %}
                     <article class="lot-card">
                         <a href="{% url 'asteroid_detail' asteroid.pk %}" class="lot-card__image-link">
-                            {% if asteroid.image %}
-                                <img src="{{ asteroid.image.url }}"
-                                     alt="{{ asteroid.title }}"
-                                     class="lot-card__image">
-                            {% else %}
-                                <span class="lot-card__image lot-card__image--empty"></span>
-                            {% endif %}
+                            <img src="{{ asteroid.image.url }}"
+                                 alt="{{ asteroid.title }}"
+                                 class="lot-card__image">
                         </a>
                         <div class="lot-card__info">
                             <h3 class="lot-card__title">

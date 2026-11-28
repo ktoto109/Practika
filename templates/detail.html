@@ -13,13 +13,9 @@
 <div class="container page page--card">
     <article class="card-detail">
         <div class="card-detail__media">
-            {% if asteroid.image %}
-                <img src="{{ asteroid.image.url }}"
-                     alt="{{ asteroid.title }}"
-                     class="card-detail__image">
-            {% else %}
-                <span class="card-detail__image card-detail__image--empty"></span>
-            {% endif %}
+            <img src="{{ asteroid.image.url }}"
+                 alt="{{ asteroid.title }}"
+                 class="card-detail__image">
         </div>
 
         <div class="card-detail__content">
